@@ -1,6 +1,5 @@
 package br.neuralnetwork;
 
-import java.util.Arrays;
 import java.util.Random;
 
 // Uma camada de neurônios é uma coleção/grupo de neurônios.
@@ -27,7 +26,10 @@ public class Layer {
 	public int[] interaction(int[] inputs) {
 		int[] output = new int[neurons.length];
 		for (int i = 0; i < output.length; i++) {
-			if (log) neurons[i].logon();
+			if (log) {
+				System.out.print("   " + (i+1) + "- ");
+				neurons[i].logon();
+			}
 			output[i] = neurons[i].interaction(inputs);
 		}
 		return output;
@@ -54,11 +56,14 @@ public class Layer {
 	
 	public void log() {
 		System.out.println("LAYER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		System.out.println(Arrays.deepToString(getDNA()));
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		for (int i = 0; i < neurons.length; i++) {
+			System.out.print("   " + (i+1) + "- ");
+			neurons[i].log();
+		}
+		System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 	}
 
 	public void logon() {
-		this.log = !this.log;
+		log = !log;
 	}
 }

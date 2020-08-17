@@ -30,7 +30,7 @@ public class Neuron {
 		
 		if (log) {
 			System.out.println("Neuron ---------------------------------------------------------------------------");
-			System.out.println("W=" + Arrays.toString(weights) + 
+			System.out.println("      W=" + Arrays.toString(weights) + 
 			                 "  I=" + Arrays.toString(inputs) + 
 			                 "  R=" + Arrays.toString(results) + 
 			                 "  O=" + output);
@@ -57,6 +57,6 @@ public class Neuron {
 	}
 	
 	public void logon() {
-		this.log = !this.log;
+		log = !log;
 	}
 }
