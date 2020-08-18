@@ -2,6 +2,8 @@ package br;
 
 import java.util.Arrays;
 
+import br.ecosystems.Race;
+import br.evolution.Ecosystem;
 import br.neuralnetwork.Layer;
 import br.neuralnetwork.NeuralNetwork;
 import br.neuralnetwork.Neuron;
@@ -10,7 +12,47 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		//*/ Testando a rede neural
+		//*/ Testando o Ecosistema (Race)
+		
+		// Cria população
+		int players = 3;
+		int[] structure = {4,2};
+		NeuralNetwork[] populacao = new NeuralNetwork[players]; 
+		for (int i = 0; i < populacao.length; i++) {
+			populacao[i] = new NeuralNetwork(structure, 3); // O output do sistema é o input da RN
+		}
+		
+		// A saída do ecosistema é a entrada na rede neural. É como a RN "ver" o que está acontecendo pra tomar uma decisão.
+		// Ex.: ["a marcha atual", "a força da marcha escolhida naquela posicao", "posição do carro na pista"]
+		int[][] outputSys = new int[populacao.length][3];
+		
+		// A entrada no ecosistema consiste na decisão tomada, que é a saída da RN. No jogo de corrida é a marcha escolhida.
+		// Ex.: [0,0] parado, [0,1] marcha 1, [1,0] marcha 2, [1,1] marcha 3 (o 1 é qualquer número diferente de 0 positivo)
+		int[][] inputSys = new int[populacao.length][2]; 
+		for (int i = 0; i < inputSys.length; i++) { // inicialmente todos os carros começam na menor marcha
+			inputSys[i][0] = 0;
+			inputSys[i][1] = 1;
+		}
+		
+		// Cria o sistema
+		Ecosystem race = new Race(populacao.length, 1000);
+		
+		// Interage com o sistema até um ponto de parada, no caso de um jogo, até termos um vencedor.
+		while (true) {
+			// todos jogam cada um na sua vez
+			for (int i = 0; i < populacao.length; i++) {
+				outputSys[i] = race.interaction(inputSys[i]); // A primeira interação na corrida é predeterminada na marcha 1
+				inputSys[i] = populacao[i].interaction(outputSys[i]); // O resultado disso é dado para a RN que toma uma decisão.
+			}
+			if (race.finished()) break; // ponto de parada
+		}
+		
+		int winner = race.winner();
+		int[][][] dnaWinner = populacao[winner].getDNA();
+		System.out.println("Winner " + Arrays.deepToString(dnaWinner));
+		//*/
+		
+		/*/ Testando a rede neural
 		int[] inputs = {1,2,3};
 		
 		int[] structure = {3,4,2};
@@ -27,6 +69,7 @@ public class Main {
 		System.out.println("\n" + Arrays.toString(nn2.interaction(inputs)));
 		nn2.logon();
 		System.out.println(Arrays.toString(nn2.interaction(inputs)));
+		//*/
 		
 		/*/ Testando a camada de neurônios
 		Layer l1 = new Layer(4, 3); // quatro neurônios com três inputs cada.
