@@ -32,12 +32,16 @@ public class Generation {
 			}
 			
 			// 2. Executa o ambiente determinando o melhor dentre a população.
+			stop:
 			while (true) {
 				for (int j = 0; j < population.length; j++) {
-					outputs[j] = ecosystem.interaction(inputs[j]);
-					inputs[j] = population[j].interaction(outputs[j]);
+					if (!ecosystem.finished()) {
+						outputs[j] = ecosystem.interaction(inputs[j]);
+						inputs[j] = population[j].interaction(outputs[j]);
+					} else {
+						break stop; // ponto de parada
+					}
 				}
-				if (ecosystem.finished()) break; // ponto de parada
 			}
 
 			System.out.print("Generation: " + (gen++) + "   ");

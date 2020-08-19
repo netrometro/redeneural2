@@ -1,6 +1,7 @@
 package br;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 import br.ecosystems.Race;
 import br.evolution.Ecosystem;
@@ -12,9 +13,44 @@ import br.neuralnetwork.Neuron;
 public class Main {
 
 	public static void main(String[] args) {
+		//*/ Testando outro ambiente (SuperSenha https://www.youtube.com/watch?v=pzhKaYnN6Vc)
+		
+		
+		/*/ Testando ecosistema com um jogador humano e uma rede neural
+		// Criando a RN
+		int players = 1;
+		int[] structure = {4,2};
+		NeuralNetwork robo = new NeuralNetwork(structure, 3);
+		
+
+		// 2. Cria o Ecosistema
+		Race race = new Race(2, 20);
+		race.logon();
+		
+		// 3. Entrada de dados para o jogador humano
+		Scanner s = new Scanner(System.in);
+		
+		// 4. Jogo em si
+		int[] inputs = {1,1}; // Necessário para que o carro não fique parado eternamente
+		while (true) {
+			System.out.print("Escolha a marcha [0,1,2,3]: ");
+			int marcha = Integer.parseInt(s.nextLine());
+			System.out.println();
+			
+			int[] outputs = race.play(marcha);
+
+			race.interaction(inputs);
+			inputs = robo.interaction(outputs);
+			
+			if (race.finished()) break;
+		}
+		
+		s.close();
+		//*/
+		
 		//*/ Testando o algoritmo generativo
 		// 1. Cria população
-		int players = 4;
+		int players = 100;
 		int[] structure = {4,2};
 		NeuralNetwork[] populacao = new NeuralNetwork[players]; 
 		for (int i = 0; i < populacao.length; i++) {
@@ -23,10 +59,10 @@ public class Main {
 		
 		// 2. Cria o Ecosistema
 		Ecosystem race = new Race(populacao.length, 20);
+		//((Race) race).logon();
 		
 		// 3. Cria e executa o sistema evolucionário
 		Generation g = new Generation(populacao, race, 0.5f);
-
 		
 		// 4. Determina-se os inputs e outputs para o ecosistema
 		int[][] outputSys = new int[populacao.length][3];
@@ -39,7 +75,7 @@ public class Main {
 			inputSys[i][1] = 1;
 		}
 		
-		int[][][] dnaWinner = g.generate(500, inputSys, outputSys); // O melhor de 1000 gerações.
+		int[][][] dnaWinner = g.generate(100000, inputSys, outputSys); // O melhor de 100000 gerações.
 		
 		System.out.println("Winner " + Arrays.deepToString(dnaWinner));
 		//*/
