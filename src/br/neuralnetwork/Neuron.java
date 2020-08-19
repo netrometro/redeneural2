@@ -47,6 +47,10 @@ public class Neuron {
 		}
 	}
 	
+	public void clone(int[] dna) {
+		weights = dna.clone();
+	}
+	
 	// Um DNA é o estado do neurônio.
 	public int[] getDNA() {
 		return weights;

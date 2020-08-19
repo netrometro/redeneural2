@@ -20,7 +20,7 @@ public class Layer {
 	public Layer(int[][] dna) {
 		neurons = new Neuron[dna.length];
 		for (int i = 0; i < neurons.length; i++) 
-			neurons[i] = new Neuron(dna[i]);
+			neurons[i] = new Neuron(dna[i].clone());
 	}
 	
 	public int[] interaction(int[] inputs) {
@@ -43,6 +43,12 @@ public class Layer {
 		Random r = new Random();
 		for (int i = 0; i < neurons.length * force; i++) {
 			neurons[r.nextInt(neurons.length)].mutation();
+		}
+	}
+	
+	public void clone(int[][] dna) {
+		for (int i = 0; i < neurons.length; i++) {
+			neurons[i].clone(dna[i].clone());
 		}
 	}
 	

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import br.ecosystems.Race;
 import br.evolution.Ecosystem;
+import br.evolution.Generation;
 import br.neuralnetwork.Layer;
 import br.neuralnetwork.NeuralNetwork;
 import br.neuralnetwork.Neuron;
@@ -11,8 +12,39 @@ import br.neuralnetwork.Neuron;
 public class Main {
 
 	public static void main(String[] args) {
+		//*/ Testando o algoritmo generativo
+		// 1. Cria população
+		int players = 4;
+		int[] structure = {4,2};
+		NeuralNetwork[] populacao = new NeuralNetwork[players]; 
+		for (int i = 0; i < populacao.length; i++) {
+			populacao[i] = new NeuralNetwork(structure, 3);
+		}
 		
-		//*/ Testando o Ecosistema (Race)
+		// 2. Cria o Ecosistema
+		Ecosystem race = new Race(populacao.length, 20);
+		
+		// 3. Cria e executa o sistema evolucionário
+		Generation g = new Generation(populacao, race, 0.5f);
+
+		
+		// 4. Determina-se os inputs e outputs para o ecosistema
+		int[][] outputSys = new int[populacao.length][3];
+		int[][] inputSys = new int[populacao.length][2];
+		
+		// 5. Configurações iniciais para os outputs (O estado inicial do ambiente) no caso de todos os outputs serem zeros, se faz necessário que os inputs sejam uns.
+		// Se for {0,0} o carro ficará parado para sempre. Porque todas as entradas são zeradas no começo.
+		for (int i = 0; i < inputSys.length; i++) { 
+			inputSys[i][0] = 1;
+			inputSys[i][1] = 1;
+		}
+		
+		int[][][] dnaWinner = g.generate(500, inputSys, outputSys); // O melhor de 1000 gerações.
+		
+		System.out.println("Winner " + Arrays.deepToString(dnaWinner));
+		//*/
+		
+		/*/ Testando o Ecosistema (Race)
 		
 		// Cria população
 		int players = 3;
@@ -35,7 +67,7 @@ public class Main {
 		}
 		
 		// Cria o sistema
-		Ecosystem race = new Race(populacao.length, 1000);
+		Ecosystem race = new Race(populacao.length, 1000); // A distância da pista é 1000 unidades.
 		
 		// Interage com o sistema até um ponto de parada, no caso de um jogo, até termos um vencedor.
 		while (true) {
@@ -65,6 +97,9 @@ public class Main {
 		nn2.log();
 		nn2.mutation(0.5f);
 		nn2.log();
+		
+		nn1.clone(nn2.getDNA());
+		nn1.log();
 		
 		System.out.println("\n" + Arrays.toString(nn2.interaction(inputs)));
 		nn2.logon();

@@ -20,7 +20,7 @@ public class NeuralNetwork {
 	public NeuralNetwork(int[][][] dna) {
 		layers = new Layer[dna.length];
 		for (int i = 0; i < layers.length; i++) {
-			layers[i] = new Layer(dna[i]);
+			layers[i] = new Layer(dna[i].clone());
 		}
 	}
 
@@ -50,6 +50,12 @@ public class NeuralNetwork {
 			dna[i] = layers[i].getDNA();
 		}
 		return dna;
+	}
+	
+	public void clone(int[][][] dna) {
+		for (int i = 0; i < layers.length; i++) {
+			layers[i].clone(dna[i].clone());
+		}
 	}
 	
 	public void log() {
