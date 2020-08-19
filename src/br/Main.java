@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import br.ecosystems.Race;
+import br.ecosystems.SuperSenha;
 import br.evolution.Ecosystem;
 import br.evolution.Generation;
 import br.neuralnetwork.Layer;
@@ -14,6 +15,35 @@ public class Main {
 
 	public static void main(String[] args) {
 		//*/ Testando outro ambiente (SuperSenha https://www.youtube.com/watch?v=pzhKaYnN6Vc)
+		// Humando Jogando
+		
+		// 1. Criando o ambiente
+		SuperSenha ss = new SuperSenha();
+		//ss.logon();
+
+		// 2. Entrada de dados para o jogador humano
+		Scanner s = new Scanner(System.in);
+		
+		// 3. Jogadas
+		while (true) {
+			System.out.print("Escolha uma senha de cinco números de 1 até 8: ");
+			String pass = s.nextLine();
+			
+			int[] passpass = new int[5];
+			for (int i = 0; i < passpass.length; i++) {
+				passpass[i] = Integer.parseInt(pass.charAt(i) + "");
+			}
+			
+			int[] outputs = ss.play(passpass);
+			System.out.println(Arrays.toString(outputs));
+			
+			if (ss.finished()) break;
+		}
+		
+		s.close();
+		
+		System.out.println("Pontuação final: " + ss.winner());
+		//*/
 		
 		
 		/*/ Testando ecosistema com um jogador humano e uma rede neural
@@ -22,7 +52,6 @@ public class Main {
 		int[] structure = {4,2};
 		NeuralNetwork robo = new NeuralNetwork(structure, 3);
 		
-
 		// 2. Cria o Ecosistema
 		Race race = new Race(2, 20);
 		race.logon();
@@ -48,7 +77,7 @@ public class Main {
 		s.close();
 		//*/
 		
-		//*/ Testando o algoritmo generativo
+		/*/ Testando o algoritmo generativo
 		// 1. Cria população
 		int players = 100;
 		int[] structure = {4,2};
