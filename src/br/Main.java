@@ -14,8 +14,94 @@ import br.neuralnetwork.Neuron;
 public class Main {
 
 	public static void main(String[] args) {
-		//*/ Testando outro ambiente (SuperSenha https://www.youtube.com/watch?v=pzhKaYnN6Vc)
-		// Humando Jogando
+		//*/ Testando o algoritmo generativo
+		// 1. Cria população
+		int players = 1000;
+		int[] structure = {20,15};
+		NeuralNetwork[] populacao = new NeuralNetwork[players]; 
+		for (int i = 0; i < populacao.length; i++) {
+			populacao[i] = new NeuralNetwork(structure, 96);
+		}
+		
+		// 2. Cria o Ecosistema
+		Ecosystem ecosystema = new SuperSenha();
+		//((SuperSenha) ecosystema).logon();
+		
+		// 3. Cria e executa o sistema evolucionário
+		Generation g = new Generation(populacao, ecosystema, 0.0f);
+		
+		// 4. Determina-se os inputs e outputs para o ecosistema
+		int[][] outputSys = new int[populacao.length][96];
+		int[][] inputSys = new int[populacao.length][15];
+		
+		// 5. Configurações iniciais para os outputs (O estado inicial do ambiente)
+		for (int i = 0; i < inputSys.length; i++) { 
+			inputSys[i] = new int[15];
+		}
+		
+		int[][][] dnaWinner = g.generateMulti(10000, inputSys, outputSys);
+		
+		System.out.println("Winner " + Arrays.deepToString(dnaWinner));
+		
+		//*/
+		
+		
+		/*/ Testando outro ambiente (SuperSenha https://www.youtube.com/watch?v=pzhKaYnN6Vc)
+		// Robô jogando
+		
+		// 1. Criando rede neural
+		// A entrada são as 5 posições da senha, como cada posicao pode ter uma das 8 "cores", temos 8x5, 40 possíveis códigos. 2 elevado a 6, então 6 neurônios de saída
+		// A senha precisa ser de 1 até 8 (0 para vazio para o estado de saída)
+		// A saída é todo o tabuleiro, as senhas utilizadas (60 posições preenchidas), os resultados dela (60 posições) e a última pontuação. 121 sensores
+		// O estado vai sendo alimentado (preenchido) com o tempo.
+		int players = 1;
+		int[] structure = {20,15};
+		NeuralNetwork robo = new NeuralNetwork(structure, 96);
+		
+		// 2. Criando a primeira entrada e a primeira saída
+		// O outputSys é o estado do jogo (12 jogadas, cada uma com 8 estados ([a jogada],[a tentativa],[acertos],[quase acertos])
+		int[] outputSys = new int[96]; // No começo o tabuleiro está zerado, vazio.
+		// O inputSys é a decisão para o jogo. Que precisa ser convertida para uma sequência de cinco números.
+		int[] inputSys = new int[15];
+
+		// 3. Criando o ambiente
+		SuperSenha ss = new SuperSenha();
+		ss.logon();
+		
+		// 4. Jogadas
+		int range = 0;
+		while (true) {
+			
+			if (ss.finished()) break;
+
+			System.out.println(Arrays.toString(outputSys));
+			inputSys = robo.interaction(outputSys);
+			
+			// 5. Converte a saída do neurônio na entrada aceita pelo ecosistema. A senha de cinco digitos.
+			for (int i = 0; i < inputSys.length; i++) {
+				if (inputSys[i] > 0) inputSys[i] = 1;
+			}
+			
+			int[] pass = new int[5];
+			int j = 0;
+			for (int i = 0; i < pass.length; i++) {
+				pass[i] = inputSys[j++] * 1 + inputSys[j++] * 2 + inputSys[j++] * 4 + 1;
+			}
+			System.out.println(Arrays.toString(inputSys));
+			System.out.println(Arrays.toString(pass));
+			
+			int[] state = ss.play(pass); // [8]
+			for (int i = 0; i < state.length; i++) {
+				outputSys[range++] = state[i];
+			}
+			
+			// winner, ao invés de retornar quem ganhou de vários jogadores, retorna a pontuação do jogador.
+		}
+		//*/
+		
+		
+		/*/ Testando outro ambiente (SuperSenha https://www.youtube.com/watch?v=pzhKaYnN6Vc)
+		// Humando jogando
 		
 		// 1. Criando o ambiente
 		SuperSenha ss = new SuperSenha();

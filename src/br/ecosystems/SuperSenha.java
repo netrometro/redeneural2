@@ -38,11 +38,6 @@ public class SuperSenha implements Ecosystem {
 	public int[] play(int[] chance) {
 		int[] results = new int[8]; // Os 5 valores da tentativa mais a quantidade de acertos(cor e local) e acertos (cor)
 		
-		if (finished) {
-			System.out.println("Jogo terminou!");
-			return results;
-		}
-		
 		int perfect = 0;
 		int almost = 0;
 		int[] passpass = pass.clone();
@@ -66,22 +61,7 @@ public class SuperSenha implements Ecosystem {
 		// Verifica o quão bem foi
 		if ((perfect * 2) + almost > winner) winner = (perfect * 2) + almost;
 		
-		
-		// Condição de parada se ganhou
-		if (perfect == 5) {
-			System.out.println("Você ganhou");
-			finished = true;
-		}
-		
-		if (log) System.out.println("Jogada: " + round + "  Tentativa: " + Arrays.toString(chance) + "  Acertou: " + perfect + "  Quase: " + almost);
-		
-		// Condição de parada se perdeu
-		// O máximo são 12 tentativas
 		round++;
-		if (round > 12) {
-			System.out.println("Perdeu! ");
-			finished = true;
-		}
 		
 		results[0] = round;
 		for (int i = 0; i < chance.length; i++) {
@@ -89,6 +69,21 @@ public class SuperSenha implements Ecosystem {
 		}
 		results[6] = perfect;
 		results[7] = almost;
+		
+		if (log) System.out.println("Jogada: " + round + "  Tentativa: " + Arrays.toString(chance) + "  Acertou: " + perfect + "  Quase: " + almost);
+
+		// Condição de parada se ganhou
+		if (perfect == 5) {
+			System.out.println("Você ganhou!"  + "   Pontuação: " + winner + "  Round: " + round);
+			finished = true;
+		}
+		
+		// Condição de parada se perdeu
+		// O máximo são 12 tentativas
+		if (round >= 12) {
+			//System.out.println("Perdeu! " + "   Pontuação: " + winner);
+			finished = true;
+		}
 		
 		return results;
 	}
@@ -100,8 +95,22 @@ public class SuperSenha implements Ecosystem {
 
 	@Override
 	public int[] interaction(int[] inputs) {
-		// TODO Auto-generated method stub
-		return null;
+		if (finished) return new int[96];
+	
+		// Transforma a decisão da RN na escolha de marcha. A senha de cinco digitos.
+		for (int i = 0; i < inputs.length; i++) {
+			if (inputs[i] > 0) inputs[i] = 1;
+		}
+		
+		int[] pass = new int[5];
+		int j = 0;
+		for (int i = 0; i < pass.length; i++) {
+			pass[i] = inputs[j++] * 1 + inputs[j++] * 2 + inputs[j++] * 4 + 1;
+		}
+		// Executa o jogo e recebe o resultado
+		int[] results = play(pass);
+		
+		return results;
 	}
 
 	@Override
