@@ -120,8 +120,9 @@ public class Generation {
 					}
 				}
 			}
-
 			
+			// 3. recolhe a melhor ameda do ecosistema
+			winner = population[ecosystem.winner()];
 		}
 		
 		return winner.getDNA();

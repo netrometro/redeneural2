@@ -90,7 +90,7 @@ public class Race implements Ecosystem {
 
 	@Override
 	public int winner() {
-		System.out.println("Winner: " + winner + "   Lap: " + lap);
+		//System.out.println("Winner: " + winner + "   Lap: " + lap);
 		return winner;
 	}
 	

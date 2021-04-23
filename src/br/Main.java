@@ -174,7 +174,7 @@ public class Main {
 		
 		// 2. Cria o Ecosistema
 		Ecosystem race = new Race(populacao.length, 20);
-		//((Race) race).logon();
+		((Race) race).logon();
 		
 		// 3. Cria e executa o sistema evolucionário
 		Generation g = new Generation(populacao, race, 0.5f);
@@ -278,7 +278,7 @@ public class Main {
 		/*/ Testando um neurônio
 		int[] inputs = {1,2,3};
 		
-		Neuron n1 = new Neuron(input.length);
+		Neuron n1 = new Neuron(inputs.length);
 		n1.log();
 		int[] dna = n1.getDNA();
 		System.out.println(Arrays.toString(dna));
